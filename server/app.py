@@ -37,7 +37,7 @@ def bakeries():
 
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
-    ipdb.set_trace()
+    # ipdb.set_trace()
     bakery = Bakery.query.filter(Bakery.id == id).first()
 
     bakery_dict = bakery.to_dict()
@@ -52,25 +52,26 @@ def bakery_by_id(id):
 @app.route('/baked_goods/by_price')
 def baked_goods_by_price():
     baked_price_by =BakedGood.query.order_by(BakedGood.price).all()
-    baked_price_by_serialized= [baked_price_by.to_dict() for baked_price_by in baked_price_by_serialized]
+    baked_price_by_serialized= [baked_price_by.to_dict() for baked_price_by in baked_price_by]
     response = make_response(
-        baked_price_by_serialized,
+        jsonify(baked_price_by_serialized),
         200
     )
-
+    response.headers['Content-Type']='application/json'
     return response
+
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
     most_expensive = BakedGood.query.order_by(BakedGood.price.desc()).first()
     most_expensive_serialized = most_expensive.to_dict()
-
     response = make_response(
-        most_expensive_serialized,
+        jsonify(most_expensive_serialized),
         200
     )
-
+    response.headers['Content-Type']='application/json'
     return response
+
 
 
 if __name__ == '__main__':
